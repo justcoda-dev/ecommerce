@@ -1,32 +1,27 @@
 <template>
   <div class="layout">
-    <v-header class="layout__header" v-bind="headerData"/>
+    <v-header v-if="!headerDataPending" class="layout__header"
+              v-bind="headerData?.attributes?.header"/>
     <div class="content">
       <slot/>
     </div>
   </div>
 </template>
 
-<script setup>
-import {onBeforeMount} from "../.nuxt/imports";
+<script lang="ts" setup>
 import {ref} from "../.nuxt/imports";
 import strapi from "../api/api";
 import VCarousel from "../components/VCarousel";
 import VHeader from "../components/VHeader";
 
-
-const headerData = ref({})
 const footerData = ref({})
 
-onBeforeMount(async () => {
-  try {
-    const response = await strapi.get("layout?populate=deep")
-    headerData.value = response.attributes?.header
-  } catch (e) {
-    console.error("error in default layout request", e)
-  }
+const {
+  data: headerData,
+  pending: headerDataPending,
+  error
+} = useAsyncData(async () => await strapi.get("layout?populate=deep"))
 
-})
 
 </script>
 
@@ -49,5 +44,8 @@ onBeforeMount(async () => {
   top: 0;
   left: 0;
   right: 0;
+  @media screen and (max-width: 990px) {
+    position: relative;
+  }
 }
 </style>

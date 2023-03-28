@@ -1,62 +1,50 @@
 <template>
   <header class="header">
-    <div class="header__contacts">
+    <div class="header__contacts-background">
       <v-container>
-        <ul class="header__contacts-list">
-          <li class="header__contacts-item"
-              v-for="{text,id} of contactsList"
-              :key="id"
-          >
-            <img src="" alt="">
-            <span>
-              {{ text }}
-            </span>
-          </li>
-        </ul>
+        <v-contacts-list :contactsList="props.contacts"/>
       </v-container>
     </div>
-    <v-container>
-      <div class="header__navigation-menu">
 
-        <div class="header__logo">
-          <NuxtLink :to="logoProps?.path">
-            {{ logoProps?.text }}
-          </NuxtLink>
+    <div class="header__navigation-background">
+      <v-container>
+
+        <div class="header__navigation-menu">
+
+          <div class="header__logo">
+            <NuxtLink :to="props.logo?.path">
+              {{ props.logo?.text }}
+            </NuxtLink>
+          </div>
+
+          <v-header-navigation
+              class="desktop"
+              :navigationList="props.navigation"
+          />
+
+          <v-burger-button
+              class="mobile"
+              @onBurgerToggle="onBurgerButton"
+          />
         </div>
-
-        <nav class="header__navigation">
-          <ul class="header__navigation-list">
-            <li class="header__navigation-item"
-                v-for="{path, text, id, deepList, show} of navigationWithShowTrigger"
-                :key="id"
-                @mouseover="onNavigationOver(id)"
-                @mouseleave="onNavigationLeave(id)"
-                @click="onNavigationClick(id)"
-            >
-              <NuxtLink :to="path">
-                {{ text }}
-              </NuxtLink>
-              <ul class="header__deep-navigation-list" v-if="deepList && show">
-                <li class="header__deep-navigation-item"
-                    v-for="{path,text, id} of deepList"
-                    :key="id">
-                  <NuxtLink :to="path">
-                    {{ text }}
-                  </NuxtLink>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </v-container>
+        <v-header-mobile-navigation
+            class="mobile"
+            :showList="navMobileToggle"
+            :navigationList="props.navigation"
+        />
+      </v-container>
+    </div>
 
   </header>
 </template>
 
 <script lang="ts" setup>
-import useNavigationHover from "../hooks/useNavigationHover";
-import VContainer from "/components/UI/VContainer";
+import VContainer from "~/components/UI/VContainer";
+import VHeaderNavigation from "~/components/VHeaderNavigation.vue";
+import VContactsList from "~/components/UI/VContactsList.vue";
+import VBurgerButton from "~/components/UI/VBurgerButton";
+import VHeaderMobileNavigation from "~/components/VHeaderMobileNavigation.vue";
+import {Ref} from "vue";
 
 const props = defineProps({
   contacts: {
@@ -73,102 +61,75 @@ const props = defineProps({
   }
 })
 
-const {navigation: navigationList, logo: logoProps, contacts: contactsList} = toRefs(props)
+const navMobileToggle = ref(false)
 
-const {
-  onClick: onNavigationClick,
-  onOver: onNavigationOver,
-  onLeave: onNavigationLeave,
-  state: navigationWithShowTrigger
-} = useNavigationHover(navigationList)
-
-
+const onBurgerButton = (event: Ref) => {
+  navMobileToggle.value = event.value
+}
 </script>
 
 <style lang="scss" scoped>
 .header {
-  a {
-    text-decoration: none;
-    color: $black;
-  }
-
-  ul {
-    list-style: none;
-  }
-
-  &__contacts {
+  &__contacts-background {
     color: $white;
     background: $black;
   }
 
-  &__contacts-list {
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 0;
-    margin: 0;
-    font-size: 11px;
-    line-height: 1.8;
-    text-transform: uppercase;
-    font-weight: 400;
-    letter-spacing: 1px;
-  }
-
-  &__contacts-item {
-    & > img {
-    }
-
-    & > span {
-    }
-  }
 
   &__logo {
+    font-weight: 800;
+    font-size: 1.25rem;
+    padding: 0.3rem 0;
+    margin-right: 1rem;
 
+    & > a {
+      @media screen and (min-width: 990px) {
+        color: $black;
+
+      }
+
+      @media screen and (max-width: 990px) {
+        color: $white;
+
+      }
+    }
+  }
+
+  &__navigation-background {
+    @media screen and (min-width: 990px) {
+      background: transparent;
+
+    }
+
+    @media screen and (max-width: 990px) {
+      background: $black;
+
+    }
   }
 
   &__navigation-menu {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     background: transparent;
+    padding: 0.6rem 0.9rem;
   }
 
-  &__navigation {
-  }
 
-  &__navigation-list {
-    display: flex;
-    padding: 0;
-    margin: 0;
-  }
+}
 
-  &__navigation-item {
-    position: relative;
-    padding: 1.3rem 1.5rem;
-    cursor: pointer;
-
-    & > a {
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-weight: 400;
-      font-size: 0.625rem;
-    }
-  }
-
-  &__deep-navigation-list {
-    display: flex;
-    flex-direction: column;
-    background: $black;
-    padding: 0.5rem 0;
-    position: absolute;
-    width: max-content;
-  }
-
-  &__deep-navigation-item {
-    padding: 0.25rem 1.5rem;
-
-    & > a {
-      color: $white;
-    }
+.desktop {
+  display: block;
+  @media screen and (max-width: 990px) {
+    display: none;
   }
 }
 
+.mobile {
+  display: none !important;
+  @media screen and (max-width: 990px) {
+    display: flex !important;
+  }
+
+}
 </style>

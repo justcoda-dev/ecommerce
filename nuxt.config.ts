@@ -1,7 +1,7 @@
-
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+    ssr: true,
+
     css: [
         "@/assets/style/main.scss",
         "@fortawesome/fontawesome-svg-core/styles.css"
@@ -19,7 +19,7 @@ export default defineNuxtConfig({
         css: {
             preprocessorOptions: {
                 scss: {
-                    additionalData:`
+                    additionalData: `
                     @import "@/assets/style/variables/colors.scss";
                     @import "@/assets/style/variables/fonts.scss";
                     `

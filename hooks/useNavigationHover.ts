@@ -1,8 +1,12 @@
 import {ref} from "vue"
+import {onBeforeUpdate} from "#imports";
 
 export default function useNavigationHover(props: any) {
-    const state = ref<any[]>(props)
 
+    const state = ref<any[]>(props)
+    onBeforeUpdate(() => {
+        state.value = props
+    })
     const onClick = (id: number) => {
         state.value.forEach(item => {
             if (item.id === id) {
