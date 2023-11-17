@@ -1,24 +1,24 @@
 <template>
-  <ul class="contacts-list">
+  <ul class="contacts-list" v-if="propsIsCome">
     <li class="contacts-list__item"
-        v-for="item of props.contactsList"
+        v-for="item of props.data"
         :key="item.id"
     >
       <!--      <v-font-awesome-icon :icon="['fas', item.icon]"/>-->
       <span>
-     {{ item.text }}
+     {{ item.attributes?.contact }}
    </span>
     </li>
   </ul>
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
-  contactsList: {
-    type: Array,
-    required: true,
-  }
-})
+interface IProps {
+  data: []
+}
+
+const props = defineProps<IProps>()
+const propsIsCome = computed(() => props.data.length)
 </script>
 
 <style lang="scss" scoped>
@@ -41,13 +41,13 @@ const props = defineProps({
     }
   }
 
-  @media screen and (max-width: 990px) {
+  @media (max-width: $l) {
     flex-wrap: wrap;
     &__item {
       margin-bottom: 0.6rem;
     }
   }
-  @media screen and (max-width: 776px) {
+  @media (max-width: $m) {
     flex-direction: column;
   }
 }

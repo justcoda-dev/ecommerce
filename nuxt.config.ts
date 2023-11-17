@@ -4,7 +4,8 @@ export default defineNuxtConfig({
 
     css: [
         "@/assets/style/main.scss",
-        "@fortawesome/fontawesome-svg-core/styles.css"
+        "@fortawesome/fontawesome-svg-core/styles.css",
+        "normalize.css/normalize.css"
     ],
     runtimeConfig: {
         // The private keys which are only available within server-side
@@ -22,6 +23,7 @@ export default defineNuxtConfig({
                     additionalData: `
                     @import "@/assets/style/variables/colors.scss";
                     @import "@/assets/style/variables/fonts.scss";
+                    @import "@/assets/style/variables/media.scss";
                     `
                 }
             }

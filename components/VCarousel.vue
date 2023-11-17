@@ -8,6 +8,7 @@
         <img
             class="carousel__image"
             :src="`${apiBase}${background?.data?.attributes?.url}`"
+            loading="lazy"
             alt="#000"
         >
         <div class="text-block">

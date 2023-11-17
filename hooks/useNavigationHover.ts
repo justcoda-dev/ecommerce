@@ -1,7 +1,7 @@
 import {ref} from "vue"
 import {onBeforeUpdate} from "#imports";
 
-export default function useNavigationHover(props: any) {
+export default function useNavigationHover(props:any) {
 
     const state = ref<any[]>(props)
     onBeforeUpdate(() => {

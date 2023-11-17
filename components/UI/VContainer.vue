@@ -14,13 +14,13 @@
   margin: auto;
   //
 
-  //@media (min-width: 576px) {
-  //}
+  @media (min-width: $s) {
+  }
 
-  @media (min-width: 768px) {
+  @media (min-width: $m) {
     margin: 0 75px;
   }
-  @media (min-width: 992px) {
+  @media (min-width: $l) {
     max-width: 1110px;
     margin: auto;
   }

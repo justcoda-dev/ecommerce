@@ -4,7 +4,6 @@ const exclusion = [
     "createdAt", "publishedAt", "updatedAt"
 ]
 
-
 const strapi = async (params: string, options?: RequestInit) => {
     const {public: {apiBase}} = useRuntimeConfig()
     const response = await fetch(`${apiBase}/api/${params}`, options)

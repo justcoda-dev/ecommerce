@@ -1,28 +1,53 @@
 <template>
   <div class="layout">
-    <v-header v-if="!headerDataPending" class="layout__header"
-              v-bind="headerData?.attributes?.header"/>
+    <v-header
+        class="layout__header"
+        v-if="!pending"
+        v-bind="data?.attributes?.header"
+        :light="lightHeader"
+    />
     <div class="content">
       <slot/>
     </div>
+    <v-footer
+        class="layout__footer"
+        v-bind="data?.attributes?.footer"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import {ref} from "../.nuxt/imports";
 import strapi from "../api/api";
-import VCarousel from "../components/VCarousel";
-import VHeader from "../components/VHeader";
+import VCarousel from "~/components/VCarousel";
+import VHeader from "~/components/VHeader";
+import VFooter from "~/components/VFooter.vue";
 
-const footerData = ref({})
+const lightHeader = ref(false)
 
 const {
-  data: headerData,
-  pending: headerDataPending,
+  data,
+  pending,
   error
 } = useAsyncData(async () => await strapi.get("layout?populate=deep"))
 
 
+const setHeaderThem = () => {
+  const scrollHeight = 300
+  if (scrollHeight < window.scrollY) {
+    lightHeader.value = true
+  } else {
+    lightHeader.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener("scroll", setHeaderThem)
+  console.log(data.value?.attributes)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener("scroll", setHeaderThem)
+})
 </script>
 
 <style lang="scss" scoped>
@@ -34,6 +59,10 @@ const {
 
   &__header {
     z-index: 2;
+  }
+
+  &__footer {
+
   }
 }
 

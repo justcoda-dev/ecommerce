@@ -1,25 +1,24 @@
 <template>
-  <header class="header">
-    <div class="header__contacts-background">
+  <header class="header" :class="{light}">
+    <div class="header__contacts-background" v-if="!light">
       <v-container>
-        <v-contacts-list :contactsList="props.contacts"/>
+        <v-contacts-list v-bind="props?.contacts"/>
       </v-container>
     </div>
 
     <div class="header__navigation-background">
       <v-container>
-
         <div class="header__navigation-menu">
-
           <div class="header__logo">
-            <NuxtLink :to="props.logo?.path">
+            <NuxtLink :to="props.logo?.path" @click="homeClick(props.logo?.path)">
               {{ props.logo?.text }}
             </NuxtLink>
           </div>
 
           <v-header-navigation
               class="desktop"
-              :navigationList="props.navigation"
+              :light="light"
+              v-bind="props.navigations"
           />
 
           <v-burger-button
@@ -27,10 +26,12 @@
               @onBurgerToggle="onBurgerButton"
           />
         </div>
+
         <v-header-mobile-navigation
-            class="mobile"
+            class="mobile-menu"
+            :light="light"
             :showList="navMobileToggle"
-            :navigationList="props.navigation"
+            v-bind="props.navigations"
         />
       </v-container>
     </div>
@@ -44,28 +45,27 @@ import VHeaderNavigation from "~/components/VHeaderNavigation.vue";
 import VContactsList from "~/components/UI/VContactsList.vue";
 import VBurgerButton from "~/components/UI/VBurgerButton";
 import VHeaderMobileNavigation from "~/components/VHeaderMobileNavigation.vue";
-import {Ref} from "vue";
 
-const props = defineProps({
-  contacts: {
-    type: Array,
-    required: false
-  },
-  logo: {
-    type: Object,
-    required: false
-  },
-  navigation: {
-    type: Array,
-    required: false
-  }
-})
+interface IProps {
+  contacts: {},
+  logo: {},
+  navigations: {},
+  light: boolean
+}
+
+const props = defineProps<IProps>()
 
 const navMobileToggle = ref(false)
+const router = useRouter()
+
+const homeClick = (src: string) => {
+  router.push({path: src})
+}
 
 const onBurgerButton = (event: Ref) => {
   navMobileToggle.value = event.value
 }
+
 </script>
 
 <style lang="scss" scoped>
@@ -83,12 +83,12 @@ const onBurgerButton = (event: Ref) => {
     margin-right: 1rem;
 
     & > a {
-      @media screen and (min-width: 990px) {
+      @media (min-width: $l) {
         color: $black;
 
       }
 
-      @media screen and (max-width: 990px) {
+      @media (max-width: $l) {
         color: $white;
 
       }
@@ -96,12 +96,12 @@ const onBurgerButton = (event: Ref) => {
   }
 
   &__navigation-background {
-    @media screen and (min-width: 990px) {
+    @media screen and (min-width: $l) {
       background: transparent;
 
     }
 
-    @media screen and (max-width: 990px) {
+    @media screen and (max-width: $l) {
       background: $black;
 
     }
@@ -116,20 +116,45 @@ const onBurgerButton = (event: Ref) => {
   }
 
 
-}
+  .desktop {
+    display: block;
+    @media (max-width: $l) {
+      display: none;
+    }
+  }
 
-.desktop {
-  display: block;
-  @media screen and (max-width: 990px) {
-    display: none;
+  .mobile {
+    display: none !important;
+    @media (max-width: $l) {
+      display: flex !important;
+
+    }
+
+  }
+
+  .mobile-menu {
+    display: none !important;
+    @media (max-width: $l) {
+      display: flex !important;
+
+    }
   }
 }
 
-.mobile {
-  display: none !important;
-  @media screen and (max-width: 990px) {
-    display: flex !important;
+
+.light {
+  position: fixed;
+  width: 100%;
+  box-shadow: 0 0 10px #878787;
+
+  .header__navigation-background {
+    background: $white;
   }
 
+  .header__logo {
+    & > a {
+      color: $black;
+    }
+  }
 }
 </style>

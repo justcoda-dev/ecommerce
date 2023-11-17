@@ -39,7 +39,6 @@ const onClick = () => {
 
 <style lang="scss" scoped>
 .discover-button {
-  cursor: pointer;
   background: #c2a942;
   border: none;
   font-size: 1.4375rem;

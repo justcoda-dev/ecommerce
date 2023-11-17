@@ -1,15 +1,18 @@
 <template>
-  <nav v-if="props.showList" class="mobile-navigation">
+  <nav class="mobile-navigation"
+       v-if="props.showList"
+       :class="{'nav-light':light}"
+  >
     <ul class="mobile-navigation__list">
       <li class="mobile-navigation__item"
-          v-for="{path, text, id, deepList, show} of navigationWithShowTrigger"
-          :key="id"
-          @mouseover="onNavigationOver(id)"
-          @mouseleave="onNavigationLeave(id)"
-          @click="onNavigationClick(id)"
+          v-for="navItem of navigationWithShowTrigger"
+          :key="navItem.id"
+          @mouseover="onNavigationOver(navItem.id)"
+          @mouseleave="onNavigationLeave(navItem.id)"
+          @click="onNavigationClick(navItem.id)"
       >
-        <NuxtLink :to="path">
-          {{ text }}
+        <NuxtLink :to="navItem.attributs?.path">
+          {{ navItem.attributes?.name }}
         </NuxtLink>
         <ul class="mobile-navigation__deep-list" v-if="deepList && show">
           <li class="mobile-navigation__deep-item"
@@ -28,20 +31,14 @@
 <script lang="ts" setup>
 import useNavigationHover from "../hooks/useNavigationHover";
 import VBurgerButton from "~/components/UI/VBurgerButton.vue";
-import {watchEffect} from "#imports";
 
-const props = defineProps({
-  navigationList: {
-    type: Array,
-    required: true,
-    default: []
-  },
-  showList: {
-    type: Boolean,
-    required: true,
-    default: false
-  }
-})
+interface IProps {
+  data: [],
+  light: boolean,
+  showList: boolean
+}
+
+const props = defineProps<IProps>()
 
 const menuToggle = ref(props.showList);
 
@@ -50,7 +47,7 @@ const {
   onOver: onNavigationOver,
   onLeave: onNavigationLeave,
   state: navigationWithShowTrigger
-} = useNavigationHover(props.navigationList)
+} = useNavigationHover(props.data)
 
 </script>
 
@@ -75,6 +72,11 @@ const {
       font-size: 0.8rem;
       color: $notActiveWhite;
     }
+
+    &:first-child > a {
+      color: $bannerBg;
+
+    }
   }
 
   &__deep-list {
@@ -95,6 +97,19 @@ const {
     & > a {
       color: $white;
     }
+  }
+
+}
+
+.nav-light {
+  background: $white;
+
+  .mobile-navigation__deep-list {
+    background: $white;
+  }
+
+  a {
+    color: $black;
   }
 }
 </style>

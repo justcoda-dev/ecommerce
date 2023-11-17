@@ -1,10 +1,12 @@
 <template>
   <div class="products">
-    <h2>{{ props.title }}</h2>
-    <p> {{ props.text }}</p>
+    <div class="products__text-block">
+      <h2 class="products__title">{{ props.title }}</h2>
+      <p class="products__text"> {{ props.text }}</p>
+    </div>
     <ul class="products__list">
       <li class="products__item" v-for="item of props.products?.data" :key="item.id">
-        <v-product :product="item"/>
+        <v-product class="products__item-product" :product="item"/>
       </li>
     </ul>
   </div>
@@ -13,34 +15,62 @@
 <script lang="ts" setup>
 import VProduct from "~/components/VProduct.vue";
 
-const props = defineProps({
-  title: {
-    type: String,
-    required: true,
-  },
-  text: {
-    type: String,
-    required: true
-  },
+interface IProps {
+  title: string,
+  text: string,
   products: {
-    type: Object,
-    required: true
-  },
-})
+    data: []
+  }
+}
+
+const props = defineProps<IProps>()
+
 </script>
 
 <style lang="scss" scoped>
 .products {
+  padding: 0;
 
   &__list {
     display: flex;
-    //flex-wrap: wrap;
     margin: 0;
     padding: 0;
+    //gap: 30px;
+    justify-content: space-around;
+    flex-wrap: wrap;
+
   }
 
+
   &__item {
-    flex: 0 1 300px;
+    flex: 0 0 100%;
+    @media (min-width: $s) {
+      flex: 0 0 50%;
+    }
+    @media (min-width: $l) {
+      flex: 0 0 25%;
+    }
+  }
+
+  &__item-product {
+    padding: 10px;
+  }
+
+  &__text-block {
+    margin-bottom: 2rem;
+  }
+
+  &__title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    font-size: 1.8rem;
+  }
+
+  &__text {
+    text-align: center;
+    color: $gray;
+    margin-bottom: 1rem;
   }
 }
 </style>

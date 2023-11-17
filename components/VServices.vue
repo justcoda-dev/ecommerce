@@ -1,13 +1,16 @@
 <template>
 
-  <ul class="services">
-    <li class="services__item" v-for="item of props.list" :key="item.id">
-      <img class="services__item-image" :src="`${apiBase}${item.image?.data?.attributes?.url}`"
-           alt="#000">
-      <h3 class="services__item-title">
+  <ul class="services-list">
+    <li class="services-list__item" v-for="item of props.list" :key="item.id">
+      <img class="services-list__item-image"
+           :src="`${apiBase}${item.image?.data?.attributes?.url}`"
+           alt="#000"
+           loading="lazy"
+      >
+      <h3 class="services-list__item-title">
         {{ item.title }}
       </h3>
-      <p class="services__item-text">
+      <p class="services-list__item-text">
         {{ item.text }}
       </p>
     </li>
@@ -26,19 +29,17 @@ const props = defineProps({
 
 const {apiBase} = useRuntimeConfig()
 
-onMounted(() => {
-  console.log(apiBase)
-})
 </script>
 
 <style lang="scss" scoped>
-.services {
-
+.services-list {
   display: flex;
   justify-content: center;
   margin: 0;
   padding: 0;
-
+  @media (max-width: $l) {
+    flex-wrap: wrap;
+  }
 
   &__item {
     padding: 3rem 1.5rem;
@@ -46,6 +47,7 @@ onMounted(() => {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
   }
 
   &__item-image {
