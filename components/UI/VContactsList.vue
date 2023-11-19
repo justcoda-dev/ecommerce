@@ -18,7 +18,7 @@ interface IProps {
 }
 
 const props = defineProps<IProps>()
-const propsIsCome = computed(() => props.data.length)
+const propsIsCome = computed(() => props.data)
 </script>
 
 <style lang="scss" scoped>

@@ -42,7 +42,6 @@ const setHeaderThem = () => {
 
 onMounted(() => {
   document.addEventListener("scroll", setHeaderThem)
-  console.log(data.value?.attributes)
 })
 
 onBeforeUnmount(() => {

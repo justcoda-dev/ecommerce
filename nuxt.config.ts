@@ -1,12 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     ssr: true,
-
+    nitro: {
+        "preset": "node-server"
+    },
     css: [
         "@/assets/style/main.scss",
         "@fortawesome/fontawesome-svg-core/styles.css",
         "normalize.css/normalize.css"
     ],
+
     runtimeConfig: {
         // The private keys which are only available within server-side
         apiSecret: "123",
@@ -28,13 +31,14 @@ export default defineNuxtConfig({
                 }
             }
         },
-        server: {
-            hmr: {
-                clientPort: 443,
-                path: "hmr/",
-                protocol: "wss",
-            },
-        },
-    }
+
+        // server: {
+        // hmr: {
+        //     clientPort: 443,
+        //     path: "hmr/",
+        //     protocol: "wss",
+        // },
+        // },
+    },
 })
 
